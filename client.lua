@@ -1,7 +1,9 @@
 -- INIT
+
 DistantCopCarSirens(false) -- Disables distant cop car sirens
 
 -- LOOP 0
+
 Citizen.CreateThread(function()
 	while true do
 		Citizen.Wait(0)
@@ -26,6 +28,7 @@ end)
 
 -- Save Wheel Position
 -- Credit: https://github.com/TFNRP/framework
+
 Citizen.CreateThread(function()
 	local vehicle
 	local angle
@@ -51,6 +54,7 @@ Citizen.CreateThread(function()
 end)
 
 -- Manage Riot Mode
+
 Citizen.CreateThread(function()
 	while true do
 		Citizen.Wait(5000)
@@ -58,7 +62,8 @@ Citizen.CreateThread(function()
 	end
 end)
 
--- Keep AI Calm, Disable emergency response [NEEDS OPTIMIZATION!!]
+-- Keep AI Calm, Disable emergency response
+-- This section can be optimized. Please do that!!!
 -- Credit: https://github.com/TFNRP/keepcalm
 
 function SetPedsToCalm(exists, handle, iter)
