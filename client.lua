@@ -26,6 +26,31 @@ Citizen.CreateThread(function()
 	end
 end)
 
+-- Discord Rich Presence
+
+	Citizen.CreateThread(function()
+		local testServer = true
+		SetDiscordAppId(tonumber(GetConvar("RichAppId", "858521709236453416")))
+		SetDiscordRichPresenceAsset(GetConvar("RichAssetId", "sa"))
+		if not testServer then
+			SetDiscordRichPresenceAction(0, "Connect to the server", "fivem://connect/m633od")
+		end
+		SetDiscordRichPresenceAction(1, "See our website and servers list", "https://www.policingmp.net")
+		while true do
+			Citizen.Wait(0)
+			if testServer then
+				SetRichPresence("Developing the future of PolicingMP")
+			else
+				SetRichPresence("A free-to-use platform")
+				Citizen.Wait(10000)
+				SetRichPresence("for Code Zero-esque stuff")
+				Citizen.Wait(10000)
+				SetRichPresence("with some cool mods")
+				Citizen.Wait(10000)
+			end
+		end
+	end)
+
 -- Save Wheel Position
 -- Credit: https://github.com/TFNRP/framework
 
@@ -85,14 +110,9 @@ Citizen.CreateThread(function()
 		SetEveryoneIgnorePlayer(player, true)
 		SetPoliceIgnorePlayer(player, true)
 		SetDispatchCopsForPlayer(player, false)
-		EnableDispatchService(1, false)
-		EnableDispatchService(2, false)
-		EnableDispatchService(3, false)
-		EnableDispatchService(5, false)
-		EnableDispatchService(8, false)
-		EnableDispatchService(9, false)
-		EnableDispatchService(10, false)
-		EnableDispatchService(11, false)
+		for i = 1, 12 do
+			EnableDispatchService(i, false)
+		end
 		SetPlayerCanBeHassledByGangs(player, false)
 		SetIgnoreLowPriorityShockingEvents(player, true)
 		SetPlayerWantedLevel(player, 0, false)
