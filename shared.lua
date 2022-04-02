@@ -7,7 +7,7 @@ RegisterCommand('riot', function(source, args, rawCommand)
 	else
 		RiotMode = false
 	end
-  end)
+end, true)
 
 RegisterCommand('blackout', function(source, args, rawCommand)
 	if Blackout == false then
