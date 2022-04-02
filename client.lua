@@ -54,29 +54,29 @@ end)
 -- Save Wheel Position
 -- Credit: https://github.com/TFNRP/framework
 
-Citizen.CreateThread(function()
-	local vehicle
-	local angle
-	while true do
-		Citizen.Wait(1)
-		local ped = PlayerPedId()
-		if IsPedInAnyVehicle(ped) then
-		vehicle = GetVehiclePedIsIn(ped)
-		local current = GetVehicleSteeringAngle(vehicle)
-		if current > 20 then
-			angle = 40.0
-		elseif current < -20 then
-			angle = -40.0
-		elseif current > 5 or current < -5 then
-			angle = current
+	Citizen.CreateThread(function()
+		local vehicle
+		local angle
+		while true do
+			Citizen.Wait(1)
+			local ped = PlayerPedId()
+			if IsPedInAnyVehicle(ped) then
+			vehicle = GetVehiclePedIsIn(ped)
+			local current = GetVehicleSteeringAngle(vehicle)
+			if current > 20 then
+				angle = 40.0
+			elseif current < -20 then
+				angle = -40.0
+			elseif current > 5 or current < -5 then
+				angle = current
+			end
+			end
+		
+			if angle and vehicle and DoesEntityExist(vehicle) and (IsPedOnFoot(ped) or IsPedStopped(ped)) then
+			SetVehicleSteeringAngle(vehicle, angle)
+			end
 		end
-		end
-	
-		if angle and vehicle and DoesEntityExist(vehicle) and (IsPedOnFoot(ped) or IsPedStopped(ped)) then
-		SetVehicleSteeringAngle(vehicle, angle)
-		end
-	end
-end)
+	end)
 
 -- Manage Riot Mode
 
