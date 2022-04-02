@@ -106,19 +106,28 @@ end
 Citizen.CreateThread(function()
 	while true do
 		Citizen.Wait(1)
-		local player = PlayerId()
-		SetEveryoneIgnorePlayer(player, true)
-		SetPoliceIgnorePlayer(player, true)
-		SetDispatchCopsForPlayer(player, false)
 		for i = 1, 12 do
 			EnableDispatchService(i, false)
 		end
-		SetPlayerCanBeHassledByGangs(player, false)
-		SetIgnoreLowPriorityShockingEvents(player, true)
-		SetPlayerWantedLevel(player, 0, false)
-		SetPlayerWantedLevelNow(player, false)
-		SetPlayerWantedLevel(player, 0, false)
-		local iter, handle = FindFirstPed()
-		SetPedsToCalm(true, handle, iter)
+		if RiotMode == true then
+			SetPlayerCanBeHassledByGangs(player, false)
+			SetIgnoreLowPriorityShockingEvents(player, false)
+			SetEveryoneIgnorePlayer(player, false)
+			SetPoliceIgnorePlayer(player, false)
+			SetDispatchCopsForPlayer(player, false)
+			SetPedsToCalm(false, handle, iter)
+		else
+			local player = PlayerId()
+			SetEveryoneIgnorePlayer(player, true)
+			SetPoliceIgnorePlayer(player, true)
+			SetDispatchCopsForPlayer(player, false)
+			SetPlayerCanBeHassledByGangs(player, true)
+			SetIgnoreLowPriorityShockingEvents(player, true)
+			SetPlayerWantedLevel(player, 0, false)
+			SetPlayerWantedLevelNow(player, false)
+			SetPlayerWantedLevel(player, 0, false)
+			local iter, handle = FindFirstPed()
+			SetPedsToCalm(true, handle, iter)
+		end
 	end
 end)
