@@ -148,6 +148,7 @@
 	local armorCooldown = false -- DON'T CHANGE THIS
 	local enableCoolDownTimer = false
 
+	TriggerEvent('chat:addSuggestion', '/heal', 'Refill your health.')
 	RegisterCommand('heal', function(source, args, rawCommand)
 		if healCooldown == false then
 			TriggerServerEvent('txaLogger:CommandExecuted', rawCommand)
@@ -197,6 +198,9 @@
 		end
 	end)
 	
+	RegisterCommandSuggestion({ 'armour', 'armor' }, 'Set your armour.', {
+		{ name = 'amount', help = '0 = none, 1 = some, 2 = under half, 3 = over half, 4 = almost max, 5 = max.' }
+	})
 	RegisterFrameworkCommand({ 'armour', 'armor' }, function(source, args, raw)
 		local amount = (tonumber(args[1]) or 5) * 20
 		if armorCooldown == false then
