@@ -1,4 +1,4 @@
 -- INIT
     
-    SetMapName("San Andreas & Cayo Perico")
-    SetGameType("Freeroam Roleplay")
+    SetMapName("San Andreas")
+    SetGameType("Roleplay")
