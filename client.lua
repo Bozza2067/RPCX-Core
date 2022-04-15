@@ -1,37 +1,46 @@
 -- INIT
 
-	DistantCopCarSirens(false) -- Disables distant cop car sirens
-	LockRadioStation("RADIO_27_DLC_PRHEI4", false) -- Unlock Still Slipping Los Santos
+DistantCopCarSirens(false) -- Disables distant cop car sirens
+LockRadioStation("RADIO_27_DLC_PRHEI4", false) -- Unlock Still Slipping Los Santos
+SetFlashLightKeepOnWhileMoving(true) -- Keep weapon flashlight on
+SetWeaponsNoAutoreload(true) -- Stop automatic reloads
+SetWeaponsNoAutoswap(true) -- Stop automatic swap weapon on empty
 
 -- VAR
 
-	local isCrouching = false
-	local enableCoolDownTimer = false
-	
-	local healCooldown = false -- DON'T CHANGE THIS
-	local armorCooldown = false -- DON'T CHANGE THIS
+local isCrouching = false
 
--- General Functions
+local Constants = {
+	SEMI_AUTO = 1,
+	BURST_FIRE = 2,
+	FULL_AUTO = 3,
+}
 
-	function ShowInfo(text)
-		SetTextComponentFormat("STRING")
-		AddTextComponentString(text)
-		DisplayHelpTextFromStringLabel(0, 0, 0, -1)
-	end
+local AllowedAuto = {
+	[GetHashKey('GROUP_RIFLE')] = true,
+	[GetHashKey('GROUP_SMG')] = true,
+}
 
-	function ShowNotification(text)
-		SetNotificationTextEntry("STRING")
-		AddTextComponentString(text)
-		DrawNotification(false, false)
-	end
+local Weapons = {}
+
+local healCooldown = false -- DON'T CHANGE THIS
+local armorCooldown = false -- DON'T CHANGE THIS
 
 -- LOOP 0
 
 	Citizen.CreateThread(function()
 		while true do
 			Citizen.Wait(0)
-			SetArtificialLightsState(Blackout)
+			SetArtificialLightsState(Blackout) -- Sets light state to current blackout state
 			SetArtificialLightsStateAffectsVehicles(false) -- Re-enables vehicle lights during blackout mode
+			HideHudComponentThisFrame(14) -- Hide Reticule
+			HideHudComponentThisFrame(2) -- Hide Ammo HUD
+
+			-- decrease dmg output of taser & baton
+			SetWeaponDamageModifierThisFrame(GetHashKey('WEAPON_STUNGUN'), .1)
+			SetWeaponDamageModifierThisFrame(GetHashKey('WEAPON_NIGHTSTICK'), .1)
+			SetWeaponDamageModifierThisFrame(GetHashKey('WEAPON_BEANBAG'), .1)
+			SetWeaponDamageModifierThisFrame(GetHashKey('WEAPON_BATON'), .01)
 
 			-- Disable combat rolling & Climbing whilst aiming
 			-- CREDIT: https://github.com/TFNRP/framework
@@ -46,32 +55,99 @@
 				DisableControlAction(1, 141, true)
 				DisableControlAction(1, 142, true)
 			end
+
+			-- Weapon Stuff
+			-- Credit: https://github.com/TFNRP/WeaponControl
+		end
+	end)
+
+-- RECOIL, FIRING MODES, RANDOM MALFUNCTIONS
+-- Credit: https://github.com/TFNRP/WeaponControl
+	Citizen.CreateThread(function()
+		while true do
+			Citizen.Wait(1)
+				-- VAR
+			local ped = PlayerPedId()
+			local _, weapon = GetCurrentPedWeapon(ped)
+			local Weapon = GetWeapon(weapon)
+
+				if IsPedShooting(ped) then
+					--[[if not IsPedInAnyVehicle(ped) then
+						local iter = 2
+						if IsPedSprinting(ped) then
+							iter = iter + 1
+						end
+						CreateThread(function()
+							local last = GetGameplayCamRelativePitch()
+							for _ = 1, iter do
+								local camera = GetGameplayCamRelativePitch()
+								local amount = camera - last
+								if GetFollowPedCamViewMode() == 4 then
+									amount = -amount
+								end
+								print(amount)
+								SetGameplayCamRelativePitch(camera - amount, 1.0)
+								last = camera
+								Wait(1)
+							end
+						end)
+					end]]
+				if AllowedAuto[GetWeapontypeGroup(weapon)] then
+					({
+						function()
+							repeat
+								DisablePlayerFiring(PlayerId(), true)
+								Wait(0)
+							until not (IsControlPressed(0, 24) or IsDisabledControlPressed(0, 24))
+						end,
+						function()
+							Wait(300)
+							while IsControlPressed(0, 24) or IsDisabledControlPressed(0, 24) do
+								DisablePlayerFiring(PlayerId(), true)
+								Wait(0)
+							end
+						end,
+						function() end,
+					})[Weapon.FiringMode]()
+				end
+				-- Jamming
+				local _, clipAmmo = GetAmmoInClip(ped, weapon)
+				-- 1 in 1000 chance to jam for each bullet
+				-- that's 40 mags of a carbine rifle or 100 mags of a pistol
+				if math.random(1, 1.2e3) == 1 and clipAmmo > 0 then
+					SetAmmoInClip(ped, weapon, 0)
+					AddAmmoToPed(ped, weapon, clipAmmo)
+					ShowNotification('Your gun is jammed.')
+				end
+			end
+		end
+	end)
+	RegisterKeyMapping('firingmode', 'Change Firing Mode', 'keyboard', 'x')
+	RegisterCommand('firingmode', function()
+	local ped = PlayerPedId()
+		if DoesEntityExist(ped) and not IsEntityDead(ped) and IsArmed() then
+		local _, weapon = GetCurrentPedWeapon(ped)
+		if AllowedAuto[GetWeapontypeGroup(weapon)] then
+			local Weapon = GetWeapon(weapon)
+			Weapon.FiringMode = ({ 2, 3, 1 })[Weapon.FiringMode]
+			ShowNotification(({
+				[Constants.SEMI_AUTO]  = 'Switched firing mode to ~r~semi-auto.',
+				[Constants.BURST_FIRE] = 'Switched firing mode to ~y~burst fire.',
+				[Constants.FULL_AUTO]  = 'Switched firing mode to ~g~full-auto.',
+			})[Weapon.FiringMode])
+			PlayClick(ped)
+			end
 		end
 	end)
 
 -- Discord Rich Presence
 
 	Citizen.CreateThread(function()
-		local testServer = true
 		SetDiscordAppId(tonumber(GetConvar("RichAppId", "858521709236453416")))
 		SetDiscordRichPresenceAsset(GetConvar("RichAssetId", "sa"))
-		if not testServer then
-			SetDiscordRichPresenceAction(0, "Connect to the server", "fivem://connect/m633od")
-		end
+		SetDiscordRichPresenceAction(0, "Connect to the server", "fivem://connect/m633od")
 		SetDiscordRichPresenceAction(1, "See our website and servers list", "https://www.policingmp.net")
-		while true do
-			Citizen.Wait(0)
-			if testServer then
-				SetRichPresence("Developing the future of PolicingMP")
-			else
-				SetRichPresence("A free-to-use platform")
-				Citizen.Wait(10000)
-				SetRichPresence("for Code Zero-esque stuff")
-				Citizen.Wait(10000)
-				SetRichPresence("with some cool mods")
-				Citizen.Wait(10000)
-			end
-		end
+		SetRichPresence("New Line Feature Test \n Line 2?!")
 	end)
 
 -- Save Wheel Position
@@ -151,7 +227,7 @@
 		end
 	end)
 
-	-- Heal self and replenish armor commands
+-- Heal self and replenish armor commands
 
 	TriggerEvent('chat:addSuggestion', '/heal', 'Refill your health.')
 	RegisterCommand('heal', function(source, args, rawCommand)
@@ -232,45 +308,38 @@
 			end
 		end
 	end)
-
-	-- Crouch mode, stealth mode rebind
-
-	RegisterKeyMapping('cr', 'Crouch down to your knees', 'keyboard', 'rcontrol')
-	RegisterKeyMapping('cr', 'Crouch down to your knees', 'keyboard', 'rcontrol')
-	RegisterFrameworkCommand({ 'crouch', 'cr' }, function(source, args, raw)
-	  DisableControlAction(0, 36, true)
-	  local ped = PlayerPedId()
-	  if DoesEntityExist(ped) and not IsEntityDead(ped) and not IsPedInAnyVehicle(ped) then
-		RequestAnimSet('move_ped_crouched')
-		while not HasAnimSetLoaded('move_ped_crouched') do
-		  Citizen.Wait(50)
-		end
 	
-		SetPedStealthMovement(ped, 0)
-		if isCrouching then
-		  if IsControlPressed(0, 21) then
-			ResetPedMovementClipset(ped, .2)
-		  else
-			ResetPedMovementClipset(ped, .3)
-		  end
-		  isCrouching = false
-		else
-		  if IsControlPressed(0, 21) then
-			SetPedMovementClipset(ped, 'move_ped_crouched', .2)
-		  else
-			SetPedMovementClipset(ped, 'move_ped_crouched', .3)
-		  end
-		  isCrouching = true
-		end
-	  end
-	end)
+-- Functions
+
+	function WeaponStub()
+		return {
+		FiringMode = 1,
+		}
+	end
 	
-	RegisterKeyMapping('stealth', 'Toggle stealth mode', 'keyboard', 'rcontrol')
-	RegisterFrameworkCommand({ 'stealth', 'duck' }, function(source, args, raw)
-	  local ped = PlayerPedId()
-	  if GetPedStealthMovement(ped) == 1 then
-		SetPedStealthMovement(ped, 0)
-	  else
-		SetPedStealthMovement(ped, 'DEFAULT_ACTION')
-	  end
-	end)
+	function GetWeapon(hash)
+		if not Weapons[hash] then
+		Weapons[hash] = WeaponStub()
+		end
+		return Weapons[hash]
+	end
+	
+	function IsArmed()
+		return IsPedArmed(PlayerPedId(), 4)
+	end
+	
+	function PlayClick(ped)
+		PlaySoundFromEntity(-1, 'Faster_Click', ped, 'RESPAWN_ONLINE_SOUNDSET', true)
+	end
+
+	function ShowInfo(text)
+		SetTextComponentFormat("STRING")
+		AddTextComponentString(text)
+		DisplayHelpTextFromStringLabel(0, 0, 0, -1)
+	end
+	
+	function ShowNotification(text)
+		SetNotificationTextEntry("STRING")
+		AddTextComponentString(text)
+		DrawNotification(false, false)
+	end
