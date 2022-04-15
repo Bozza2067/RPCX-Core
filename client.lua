@@ -3,6 +3,14 @@
 	DistantCopCarSirens(false) -- Disables distant cop car sirens
 	LockRadioStation("RADIO_27_DLC_PRHEI4", false) -- Unlock Still Slipping Los Santos
 
+-- VAR
+
+	local isCrouching = false
+	local enableCoolDownTimer = false
+	
+	local healCooldown = false -- DON'T CHANGE THIS
+	local armorCooldown = false -- DON'T CHANGE THIS
+
 -- General Functions
 
 	function ShowInfo(text)
@@ -145,54 +153,46 @@
 
 	-- Heal self and replenish armor commands
 
-	local healCooldown = false -- DON'T CHANGE THIS
-	local armorCooldown = false -- DON'T CHANGE THIS
-	local enableCoolDownTimer = false
-
 	TriggerEvent('chat:addSuggestion', '/heal', 'Refill your health.')
 	RegisterCommand('heal', function(source, args, rawCommand)
 		if healCooldown == false then
 			TriggerServerEvent('txaLogger:CommandExecuted', rawCommand)
-			if enableCoolDownTimer then
-				healCooldown = true
-				ShowInfo("You will be healed in 15 seconds. Please wait.")
-				Wait(1000)
-				ShowInfo("You will be healed in 14 seconds. Please wait.")
-				Wait(1000)
-				ShowInfo("You will be healed in 13 seconds. Please wait.")
-				Wait(1000)
-				ShowInfo("You will be healed in 12 seconds. Please wait.")
-				Wait(1000)
-				ShowInfo("You will be healed in 11 seconds. Please wait.")
-				Wait(1000)
-				ShowInfo("You will be healed in 10 seconds. Please wait.")
-				Wait(1000)
-				ShowInfo("You will be healed in 9 seconds. Please wait.")
-				Wait(1000)
-				ShowInfo("You will be healed in 8 seconds. Please wait.")
-				Wait(1000)
-				ShowInfo("You will be healed in 7 seconds. Please wait.")
-				Wait(1000)
-				ShowInfo("You will be healed in 6 seconds. Please wait.")
-				Wait(1000)
-				ShowInfo("You will be healed in 6 seconds. Please wait.")
-				Wait(1000)
-				ShowInfo("You will be healed in 5 seconds. Please wait.")
-				Wait(1000)
-				ShowInfo("You will be healed in 4 seconds. Please wait.")
-				Wait(1000)
-				ShowInfo("You will be healed in 3 seconds. Please wait.")
-				Wait(1000)
-				ShowInfo("You will be healed in 2 seconds. Please wait.")
-				Wait(1000)
-				ShowInfo("You will be healed in 1 seconds. Please wait.")
-				Wait(1000)
-				ShowInfo("You have been healed. You will be able to heal yourself again in 20 seconds.")
-				Wait(20000)
-			else
-				ShowInfo("You have been healed.")
-			end
+			healCooldown = true
+			ShowInfo("You will be healed in 15 seconds. Please wait.")
+			Wait(1000)
+			ShowInfo("You will be healed in 14 seconds. Please wait.")
+			Wait(1000)
+			ShowInfo("You will be healed in 13 seconds. Please wait.")
+			Wait(1000)
+			ShowInfo("You will be healed in 12 seconds. Please wait.")
+			Wait(1000)
+			ShowInfo("You will be healed in 11 seconds. Please wait.")
+			Wait(1000)
+			ShowInfo("You will be healed in 10 seconds. Please wait.")
+			Wait(1000)
+			ShowInfo("You will be healed in 9 seconds. Please wait.")
+			Wait(1000)
+			ShowInfo("You will be healed in 8 seconds. Please wait.")
+			Wait(1000)
+			ShowInfo("You will be healed in 7 seconds. Please wait.")
+			Wait(1000)
+			ShowInfo("You will be healed in 6 seconds. Please wait.")
+			Wait(1000)
+			ShowInfo("You will be healed in 6 seconds. Please wait.")
+			Wait(1000)
+			ShowInfo("You will be healed in 5 seconds. Please wait.")
+			Wait(1000)
+			ShowInfo("You will be healed in 4 seconds. Please wait.")
+			Wait(1000)
+			ShowInfo("You will be healed in 3 seconds. Please wait.")
+			Wait(1000)
+			ShowInfo("You will be healed in 2 seconds. Please wait.")
+			Wait(1000)
+			ShowInfo("You will be healed in 1 seconds. Please wait.")
+			Wait(1000)
 			SetEntityHealth(GetPlayerPed(-1), 200)
+			ShowInfo("You have been healed. You will be able to heal yourself again in 20 seconds.")
+			Wait(20000)
 			healCooldown = false
 		else
 			ShowInfo("You cannot heal yourself now.")
@@ -233,3 +233,44 @@
 		end
 	end)
 
+	-- Crouch mode, stealth mode rebind
+
+	RegisterKeyMapping('cr', 'Crouch down to your knees', 'keyboard', 'rcontrol')
+	RegisterKeyMapping('cr', 'Crouch down to your knees', 'keyboard', 'rcontrol')
+	RegisterFrameworkCommand({ 'crouch', 'cr' }, function(source, args, raw)
+	  DisableControlAction(0, 36, true)
+	  local ped = PlayerPedId()
+	  if DoesEntityExist(ped) and not IsEntityDead(ped) and not IsPedInAnyVehicle(ped) then
+		RequestAnimSet('move_ped_crouched')
+		while not HasAnimSetLoaded('move_ped_crouched') do
+		  Citizen.Wait(50)
+		end
+	
+		SetPedStealthMovement(ped, 0)
+		if isCrouching then
+		  if IsControlPressed(0, 21) then
+			ResetPedMovementClipset(ped, .2)
+		  else
+			ResetPedMovementClipset(ped, .3)
+		  end
+		  isCrouching = false
+		else
+		  if IsControlPressed(0, 21) then
+			SetPedMovementClipset(ped, 'move_ped_crouched', .2)
+		  else
+			SetPedMovementClipset(ped, 'move_ped_crouched', .3)
+		  end
+		  isCrouching = true
+		end
+	  end
+	end)
+	
+	RegisterKeyMapping('stealth', 'Toggle stealth mode', 'keyboard', 'rcontrol')
+	RegisterFrameworkCommand({ 'stealth', 'duck' }, function(source, args, raw)
+	  local ped = PlayerPedId()
+	  if GetPedStealthMovement(ped) == 1 then
+		SetPedStealthMovement(ped, 0)
+	  else
+		SetPedStealthMovement(ped, 'DEFAULT_ACTION')
+	  end
+	end)
