@@ -208,22 +208,18 @@
 			TriggerServerEvent('txaLogger:CommandExecuted', rawCommand)
 			if not IsPlayerDead(PlayerId()) then
 				armorCooldown = true
-				if enableCoolDownTimer then
-					ShowInfo("Replenishing your armor. Please wait 5 seconds.")
-					Wait(1000)
-					ShowInfo("Replenishing your armor. Please wait 4 seconds.")
-					Wait(1000)
-					ShowInfo("Replenishing your armor. Please wait 3 seconds.")
-					Wait(1000)
-					ShowInfo("Replenishing your armor. Please wait 2 seconds.")
-					Wait(1000)
-					ShowInfo("Replenishing your armor. Please wait 1 second.")
-					Wait(1000)
-					ShowInfo("Your armor has been replenished. You will be able to replenish it again in 10 seconds.")
-					Wait(10000)
-				else
-					ShowInfo("Your armor has been replenished.")
-				end
+				ShowInfo("Replenishing your armor. Please wait 5 seconds.")
+				Wait(1000)
+				ShowInfo("Replenishing your armor. Please wait 4 seconds.")
+				Wait(1000)
+				ShowInfo("Replenishing your armor. Please wait 3 seconds.")
+				Wait(1000)
+				ShowInfo("Replenishing your armor. Please wait 2 seconds.")
+				Wait(1000)
+				ShowInfo("Replenishing your armor. Please wait 1 second.")
+				Wait(1000)
+				ShowInfo("Your armor has been replenished. You will be able to replenish it again in 10 seconds.")
+				Wait(10000)
 				if amount > 100 then 
 					amount = 100
 				elseif amount < 0 then 
