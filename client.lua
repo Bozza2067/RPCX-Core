@@ -145,7 +145,7 @@ local armorCooldown = false -- DON'T CHANGE THIS
 		SetDiscordRichPresenceAsset(GetConvar("RichAssetId", "sa"))
 		SetDiscordRichPresenceAction(0, "Connect to the server", "fivem://connect/m633od")
 		SetDiscordRichPresenceAction(1, "See our website and servers list", "https://www.policingmp.net")
-		SetRichPresence("New Line Feature Test \n Line 2?!")
+		SetRichPresence("Bottom Text \n Top Text")
 	end)
 
 -- Save Wheel Position
