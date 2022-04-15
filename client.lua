@@ -8,8 +8,6 @@ SetWeaponsNoAutoswap(true) -- Stop automatic swap weapon on empty
 
 -- VAR
 
-local isCrouching = false
-
 local Constants = {
 	SEMI_AUTO = 1,
 	BURST_FIRE = 2,
