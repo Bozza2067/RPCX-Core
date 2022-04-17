@@ -307,6 +307,21 @@ local armorCooldown = false -- DON'T CHANGE THIS
 		end
 	end)
 
+-- Toggle Engine
+	RegisterKeyMapping("+toggle_engine", "Toggle Engine", "keyboard", "F6")
+	RegisterCommand('+toggle_engine', function() 
+		ToggleEngine()
+	end, false)
+
+	function ToggleEngine()
+		local vehicle = GetVehiclePedIsIn(PlayerPedId(), false)
+		local player = GetPlayerPed(-1)
+		if vehicle ~= nil and vehicle ~= 0 and GetPedInVehicleSeat(vehicle, -1) == player then     --Checks for vehicle and if player is in driver seat
+			SetVehicleEngineOn(vehicle, (not GetIsVehicleEngineRunning(vehicle)), false, false)     -- If you want auto-start enabled when player gets in change last param to false
+			SetPedConfigFlag(player, 429, true) -- Prevents car from turning back on when turning off engine whilst driving
+		end
+	end
+
 -- Synchronize Vehicle Weapon with Foot Weapon
 -- Credit: https://github.com/TFNRP/framework/blob/main/client.lua
 	Citizen.CreateThread(function()
