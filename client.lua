@@ -24,6 +24,21 @@ local Weapons = {}
 local healCooldown = false -- DON'T CHANGE THIS
 local armorCooldown = false -- DON'T CHANGE THIS
 
+DoorIndex = {
+  ['driver'] = 1,
+  ['left'] = 1,
+  ['passenger'] = 2,
+  ['right'] = 2,
+  ['rear left passenger'] = 3,
+  ['rear left'] = 3,
+  ['rear right passenger'] = 4,
+  ['rear right'] = 4,
+  ['hood'] = 5,
+  ['bonnet'] = 5,
+  ['trunk'] = 6,
+  ['boot'] = 6,
+}
+
 -- LOOP 0
 
 	Citizen.CreateThread(function()
@@ -308,19 +323,17 @@ local armorCooldown = false -- DON'T CHANGE THIS
 	end)
 
 -- Toggle Engine
-	RegisterKeyMapping("+toggle_engine", "Toggle Engine", "keyboard", "F6")
-	RegisterCommand('+toggle_engine', function() 
-		ToggleEngine()
-	end, false)
+	--https://github.com/TFNRP/framework/blob/main/client.lua
 
-	function ToggleEngine()
-		local vehicle = GetVehiclePedIsIn(PlayerPedId(), false)
-		local player = GetPlayerPed(-1)
-		if vehicle ~= nil and vehicle ~= 0 and GetPedInVehicleSeat(vehicle, -1) == player then     --Checks for vehicle and if player is in driver seat
-			SetVehicleEngineOn(vehicle, (not GetIsVehicleEngineRunning(vehicle)), false, false)     -- If you want auto-start enabled when player gets in change last param to false
-			SetPedConfigFlag(player, 429, true) -- Prevents car from turning back on when turning off engine whilst driving
+	RegisterKeyMapping('engine', 'Toggle Engine', 'keyboard', 'F6')
+	RegisterFrameworkCommand({ 'engine', 'eng' }, function(source, args, raw)
+		local ped = PlayerPedId()
+		if IsPedInAnyVehicle(ped) then
+		  local vehicle = GetVehiclePedIsIn(ped)
+		  local on = GetIsVehicleEngineRunning(vehicle)
+		  SetVehicleEngineOn(vehicle, not on, false, true)
 		end
-	end
+	  end)
 
 -- Synchronize Vehicle Weapon with Foot Weapon
 -- Credit: https://github.com/TFNRP/framework/blob/main/client.lua
@@ -357,7 +370,130 @@ local armorCooldown = false -- DON'T CHANGE THIS
 			GetCurrentPedVehicleWeapon(ped)
 		end
 	end)
+	
+	-- Hood, Trunk, Door and Window commands
+	-- Credit: https://github.com/TFNRP/framework/blob/main/client.lua
 
+	RegisterCommandSuggestion('hood', 'Open the hood of the vehicle you\'re near.')
+	RegisterCommandSuggestion('trunk', 'Open the trunk of the vehicle you\'re near.')
+	RegisterCommandSuggestion('door', 'Open a door of the vehicle you\'re near.', {
+	{ name = 'door', help = 'Can be the number of the door or the door\'s name. i.e. "driver", "passenger", "1", "2"' }
+	})
+	RegisterCommandSuggestion('door f', 'Just like /door, but forces the door to stay open.', {
+	{ name = 'door', help = 'Can be the number of the door or the door\'s name. i.e. "driver", "passenger", "1", "2"' }
+	})
+	RegisterCommandSuggestion('door q', 'Just like /door, but instantly opens/closes doors.', {
+	{ name = 'door', help = 'Can be the number of the door or the door\'s name. i.e. "driver", "passenger", "1", "2"' }
+	})
+
+	RegisterFrameworkCommand('hood', function()
+		local vehicle = GetVehiclePedIsInOrNear(PlayerPedId(), false)
+		if vehicle and vehicle > 1 then
+		  NetworkRequestControlOfEntity(vehicle)
+		  if GetVehicleDoorAngleRatio(vehicle, 4) > 0 then
+			SetVehicleDoorShut(vehicle, 4, false)
+		  else
+			SetVehicleDoorOpen(vehicle, 4, false, false)
+			Wait(1e3)
+			SetVehicleDoorOpen(vehicle, 4, true, false)
+		  end
+		end
+	  end)
+	  
+	  RegisterFrameworkCommand('trunk', function()
+		local vehicle = GetVehiclePedIsInOrNear(PlayerPedId(), false)
+		if vehicle and vehicle > 1 then
+		  NetworkRequestControlOfEntity(vehicle)
+		  if GetVehicleDoorAngleRatio(vehicle, 5) > 0 then
+			SetVehicleDoorShut(vehicle, 5, false)
+		  else
+			SetVehicleDoorOpen(vehicle, 5, false, false)
+			Wait(1e3)
+			SetVehicleDoorOpen(vehicle, 5, true, false)
+		  end
+		end
+	  end)
+	  
+	  RegisterFrameworkCommand('door', function(source, args, raw)
+		local vehicle = GetVehiclePedIsInOrNear(PlayerPedId(), false)
+		local loose = true
+		local instant = false
+		if #args == 0 then table.insert(args, 1) end
+		for _, arg in ipairs(args) do
+		  local door = tonumber(arg)
+		  if not door then
+			arg = arg:lower()
+			if DoorIndex[arg] then
+			  door = DoorIndex[arg]
+			elseif ({ f = true, force = true })[arg] then
+			  loose = false
+			elseif ({ q = true, quick = true })[arg] then
+			  instant = true
+			else
+			  CommandWarning('Didn\'t understand what "' .. arg .. '" was.')
+			end
+		  end
+		  if door then
+			door = door - 1
+			if vehicle and vehicle > 1 then
+			  local doors = GetNumberOfVehicleDoors(vehicle) - 1
+			  if doors < door then door = doors
+			  elseif door < 0 then door = 0 end
+			  NetworkRequestControlOfEntity(vehicle)
+			  if GetVehicleDoorAngleRatio(vehicle, door) > 0 then
+				SetVehicleDoorShut(vehicle, door, instant)
+			  else
+				CreateThread(function()
+				  SetVehicleDoorOpen(vehicle, door, false, instant)
+				  Wait(1e3)
+				  SetVehicleDoorOpen(vehicle, door, loose, instant)
+				end)
+			  end
+			end
+		  end
+		end
+	  end)
+
+	  RegisterCommandSuggestion('window', 'Open a window of the vehicle you\'re in.', {
+		{ name = 'door', help = 'Can be the number of the window or the window\'s name. i.e. "driver", "passenger", "1", "2"' }
+		})
+	  RegisterFrameworkCommand('window', function(source, args, raw)
+		local vehicle = GetVehiclePedIsIn(PlayerPedId(), false)
+		local window = (tonumber(args[1]) or 1) - 1
+		if vehicle and vehicle > 1 then
+		  if window > 11 then window = 11
+		  elseif window < 0 then window = 0 end
+		  local decoratorName = 'WindowRolledDown' .. window
+		  if not DecorIsRegisteredAsType(decoratorName, 2) then
+			DecorRegister(decoratorName, 2)
+		  end
+		  if not DecorGetBool(vehicle, decoratorName) then
+			DecorSetBool(vehicle, decoratorName, true)
+			RollDownWindow(vehicle, window)
+		  else
+			DecorSetBool(vehicle, decoratorName, false)
+			RollUpWindow(vehicle, window)
+		  end
+		end
+	  end)
+
+-- leave engine running
+		Citizen.CreateThread(function()
+			while true do
+			Citizen.Wait(1)
+			local ped = PlayerPedId()
+		
+			if DoesEntityExist(ped) and IsPedInAnyVehicle(ped, false) and IsControlPressed(2, 75) and not IsEntityDead(ped) and not IsPauseMenuActive() then
+				Citizen.Wait(200)
+				if IsPedInAnyVehicle(ped, false) and IsControlPressed(2, 75) and not IsEntityDead(ped) then
+					local vehicle = GetVehiclePedIsIn(ped, true)
+					SetVehicleEngineOn(vehicle, true, true, false)
+					TaskLeaveVehicle(ped, vehicle, 0)
+					end
+				end
+			end
+		end)
+	  
 	
 -- Functions
 
@@ -392,4 +528,20 @@ local armorCooldown = false -- DON'T CHANGE THIS
 		SetNotificationTextEntry("STRING")
 		AddTextComponentString(text)
 		DrawNotification(false, false)
+	end
+
+	-- https://github.com/TFNRP/framework/blob/main/client.lua
+	function GetVehiclePedIsInOrNear(ped, lastVehicle)
+	  local vehicle = GetVehiclePedIsIn(ped, lastVehicle)
+	  if vehicle and vehicle > 1 then
+		return vehicle
+	  else
+		local position = GetEntityCoords(ped)
+		local front = GetOffsetFromEntityInWorldCoords(ped, .0, 3.5, -.5)
+		local rayHandle = CastRayPointToPoint(position.x, position.y, position.z, front.x, front.y, front.z, 10, ped, 0)
+		local _, _, _, _, vehicle = GetRaycastResult(rayHandle)
+		if DoesEntityExist(vehicle) then
+		  return vehicle
+		end
+	  end
 	end
