@@ -28,11 +28,11 @@ Blackout = false
 		end
 	end
 	function RegisterCommandSuggestion(command, description, parameters, client)
-	if type(command) == 'table' then
-		for _, c in ipairs(command) do
-		RegisterCommandSuggestion(c, description, parameters)
+		if type(command) == 'table' then
+			for _, c in ipairs(command) do
+			RegisterCommandSuggestion(c, description, parameters)
+			end
+		else
+			TriggerEvent('chat:addSuggestion', '/' .. command, description, parameters)
 		end
-	else
-		TriggerEvent('chat:addSuggestion', '/' .. command, description, parameters)
-	end
 	end
