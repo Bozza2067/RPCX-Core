@@ -1,46 +1,49 @@
--- INIT
+-- CONFIG
 
-DistantCopCarSirens(false) -- Disables distant cop car sirens
-LockRadioStation("RADIO_27_DLC_PRHEI4", false) -- Unlock Still Slipping Los Santos
-SetFlashLightKeepOnWhileMoving(true) -- Keep weapon flashlight on
-SetWeaponsNoAutoreload(true) -- Stop automatic reloads
-SetWeaponsNoAutoswap(true) -- Stop automatic swap weapon on empty
+	local BetterFlashlight = true -- Set this to true when BetterFlashlight is installed (https://miraf.tebex.io/package/4941283)
 
 -- VAR
 
-local Constants = {
-	SEMI_AUTO = 1,
-	BURST_FIRE = 2,
-	FULL_AUTO = 3,
-}
+	local Constants = {
+		SEMI_AUTO = 1,
+		BURST_FIRE = 2,
+		FULL_AUTO = 3,
+	}
 
-local AllowedAuto = {
-	[GetHashKey('GROUP_RIFLE')] = true,
-	[GetHashKey('GROUP_SMG')] = true,
-}
+	local AllowedAuto = {
+		[GetHashKey('GROUP_RIFLE')] = true,
+		[GetHashKey('GROUP_SMG')] = true,
+	}
 
-local Weapons = {}
+	local Weapons = {}
 
-local healCooldown = false -- DON'T CHANGE THIS
-local armorCooldown = false -- DON'T CHANGE THIS
+	local healCooldown = false -- DON'T CHANGE THIS
+	local armorCooldown = false -- DON'T CHANGE THIS
 
-DoorIndex = {
-  ['driver'] = 1,
-  ['left'] = 1,
-  ['passenger'] = 2,
-  ['right'] = 2,
-  ['rear left passenger'] = 3,
-  ['rear left'] = 3,
-  ['rear right passenger'] = 4,
-  ['rear right'] = 4,
-  ['hood'] = 5,
-  ['bonnet'] = 5,
-  ['trunk'] = 6,
-  ['boot'] = 6,
-}
+	DoorIndex = {
+	['driver'] = 1,
+	['left'] = 1,
+	['passenger'] = 2,
+	['right'] = 2,
+	['rear left passenger'] = 3,
+	['rear left'] = 3,
+	['rear right passenger'] = 4,
+	['rear right'] = 4,
+	['hood'] = 5,
+	['bonnet'] = 5,
+	['trunk'] = 6,
+	['boot'] = 6,
+	}
+
+-- INIT
+
+	DistantCopCarSirens(false) -- Disables distant cop car sirens
+	LockRadioStation("RADIO_27_DLC_PRHEI4", false) -- Unlock Still Slipping Los Santos
+	SetFlashLightKeepOnWhileMoving(true) -- Keep weapon flashlight on
+	SetWeaponsNoAutoreload(true) -- Stop automatic reloads
+	SetWeaponsNoAutoswap(true) -- Stop automatic swap weapon on empty
 
 -- LOOP 0
-
 	Citizen.CreateThread(function()
 		while true do
 			Citizen.Wait(0)
@@ -493,8 +496,17 @@ DoorIndex = {
 				end
 			end
 		end)
-	  
-	
+
+-- Persistent Flashlight compatibility with BetterFlashlight
+	Citizen.CreateThread(function()
+		while true do
+			Citizen.Wait(2500)
+			if BetterFlashlight then
+				SetFlashLightKeepOnWhileMoving(true)
+			end
+		end
+	end)
+
 -- Functions
 
 	function WeaponStub()
