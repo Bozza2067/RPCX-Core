@@ -163,7 +163,7 @@
 		SetDiscordRichPresenceAsset(GetConvar("RichAssetId", "sa"))
 		SetDiscordRichPresenceAction(0, "Connect to the server", "fivem://connect/m633od")
 		SetDiscordRichPresenceAction(1, "See our website and servers list", "https://www.policingmp.net")
-		SetRichPresence("Our experimental server \n Connected to RPCJ")
+		SetRichPresence("Our experimental server\nConnected to RPCJ")
 	end)
 
 -- Save Wheel Position
