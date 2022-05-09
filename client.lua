@@ -1,7 +1,3 @@
--- CONFIG
-
-	local BetterFlashlight = true -- Set this to true when BetterFlashlight is installed (https://miraf.tebex.io/package/4941283)
-
 -- VAR
 
 	local Constants = {
@@ -505,7 +501,7 @@
 	Citizen.CreateThread(function()
 		while true do
 			Citizen.Wait(2500)
-			if BetterFlashlight then
+			if BetterFlashlightInstalled then
 				SetFlashLightKeepOnWhileMoving(true)
 			end
 		end
