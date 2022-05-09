@@ -159,11 +159,15 @@
 -- Discord Rich Presence
 
 	Citizen.CreateThread(function()
-		SetDiscordAppId(tonumber(GetConvar("RichAppId", "858521709236453416")))
-		SetDiscordRichPresenceAsset(GetConvar("RichAssetId", "sa"))
-		SetDiscordRichPresenceAction(0, "Connect to the server", "fivem://connect/m633od")
-		SetDiscordRichPresenceAction(1, "See our website and servers list", "https://www.policingmp.net")
-		SetRichPresence("Our experimental server\nPlaying on RPCJ:")
+		if RichPresence.Enabled == true then
+			if RichPresence.AppID ~= nil then
+				SetDiscordAppId(tonumber(GetConvar("RichAppId", RichPresence.AppID)))
+				SetDiscordRichPresenceAsset(GetConvar("RichAssetId", RichPresence.AssetID))
+				SetRichPresence(RichPresence.Text.Line1 .. "\n" .. RichPresence.Text.Line2)
+			end
+			--SetDiscordRichPresenceAction(0, "Connect to the server", "fivem://connect/m633od")
+			--SetDiscordRichPresenceAction(1, "See our website and servers list", "https://www.policingmp.net")
+		end
 	end)
 
 -- Save Wheel Position
