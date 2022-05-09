@@ -163,10 +163,10 @@
 			if RichPresence.AppID ~= nil then
 				SetDiscordAppId(tonumber(GetConvar("RichAppId", RichPresence.AppID)))
 				SetDiscordRichPresenceAsset(GetConvar("RichAssetId", RichPresence.AssetID))
-				SetRichPresence(RichPresence.Text.Line1 .. "\n" .. RichPresence.Text.Line2)
 			end
 			--SetDiscordRichPresenceAction(0, "Connect to the server", "fivem://connect/m633od")
 			--SetDiscordRichPresenceAction(1, "See our website and servers list", "https://www.policingmp.net")
+			SetRichPresence(RichPresence.Text.Line2 .. "\n" .. RichPresence.Text.Line1)
 		end
 	end)
 
