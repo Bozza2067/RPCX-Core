@@ -8,8 +8,8 @@ RichPresence = {
 	AppID = "", -- ID of the Discord Application you wish to use. Leave empty to use the default FiveM one.
 	AssetID = "", -- Requires you to have set an AppID and added rich presence assets to that application.
 	Text = {
-		Line1 = "Cfx.re Development Kit",
-		Line2 = "Experimenting a little",
+		Line1 = "RPCX PolicingMP Experimental",
+		Line2 = "Probably Testing stuff for PMP, SAR, or NWRP.",
 	},
 	-- BELOW THIS LINE IS NOT FUNCTIONING! TO CHANGE PICTURES AND LINKS YOU WILL HAVE TO GO TO CLIENT.LUA FOR NOW!
 	Button1 = { 
