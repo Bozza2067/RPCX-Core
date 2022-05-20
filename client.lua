@@ -193,6 +193,28 @@
 		end
 	end)
 
+-- Delete vehicle
+-- Credit: https://github.com/TFNRP/framework
+
+	RegisterFrameworkCommand({ 'dv', 'delveh' }, function()
+		local ped = GetPlayerPed(-1)
+		local vehicle = GetVehiclePedIsInOrNear(ped, false)
+		if vehicle and vehicle > 1 then
+		  if IsPedSittingInVehicle(ped, vehicle) and not GetPedInVehicleSeat(vehicle, -1) == ped then
+			ShowNotification('~r~Error: ~s~You must be the driver of the vehicle.')
+		  else
+			NetworkRequestControlOfEntity(vehicle)
+			SetEntityAsMissionEntity(vehicle, true, true)
+			DeleteVehicle(vehicle)
+			if not (DoesEntityExist(vehicle)) then
+			  ShowNotification('~g~Success: ~s~Vehicle deleted.')
+			end
+		  end
+		else
+		  ShowNotification('~r~Error: ~w~You must be close to or in a vehicle.')
+		end
+	  end)
+
 -- Manage Riot Mode
 
 	Citizen.CreateThread(function()
