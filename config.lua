@@ -45,8 +45,8 @@ blips = {
 			Check2 = { Title = "Drive-through", Value = 80, },
 			Check3 = { Title = "Delivery", Value = 79, },
 		]]
-		website = "beanmachinecoffee.com",
-		phone = "+1 310-555-0134",
+		website = "beanmachinecoffee.com", -- Optional
+		phone = "+1 310-555-0134", -- Optional
 	},
 	{
 		type = "Coffee Shop",
