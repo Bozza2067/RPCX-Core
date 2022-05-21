@@ -4,6 +4,8 @@ There's gonna be a bunch of experimental stuff and probably bad code in here and
 
 I'm using some code from other people, admittedly. I try to add links to the original code commented above where I can.
 
-This script is **not currently active** on the main PolicingMP server at this time.
+## Dependencies
+https://github.com/glitchdetector/fivem-blip-info
 
+## Credits
 Major credit: https://github.com/TFNRP/framework
