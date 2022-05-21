@@ -4,8 +4,12 @@ There's gonna be a bunch of experimental stuff and probably bad code in here and
 
 I'm using some code from other people, admittedly. I try to add links to the original code commented above where I can.
 
+## What does it do?
+- 
+
 ## Dependencies
 - https://github.com/glitchdetector/fivem-blip-info Required to see additional info in the pause menu
 
 ## Credits
-- Major credit: https://github.com/TFNRP/framework
+- https://github.com/TFNRP/framework
+- https://github.com/TFNRP/WeaponControl
