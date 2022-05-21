@@ -1,4 +1,4 @@
 -- INIT
     
-    SetMapName("San Andreas")
-    SetGameType("Roleplay")
+    SetMapName(MapName)
+    SetGameType(GameType)
