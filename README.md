@@ -30,7 +30,7 @@ In no particular order:
 - Ability to pole dance at Vanilla Unicorn
 
 ### Misc:
-- Discord Rich Presence
+- Basic Configurable Discord Rich Presence
 - Configurable blips around the map (can be expanded with Blip Info Utility, get it below)
 - NPCs will remain calm in shootings, etc
 - Disabled emergency services responses, wanted levels
