@@ -31,6 +31,7 @@ In no particular order:
 
 ### Misc:
 - Discord Rich Presence
+- Configurable blips around the map (can be expanded with Blip Info Utility, get it below)
 - NPCs will remain calm in shootings, etc
 - Disabled emergency services responses, wanted levels
 - Blackout mode that keeps vehicle lights on (/blackout)
