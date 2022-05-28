@@ -23,6 +23,7 @@ In no particular order:
 - Toggle engine command (/eng) with rebindable key (F6 by default)
 - /door, /window, /trunk, /hood commands
 - Holding the button to get out of a vehicle will leave the engine running
+- Replace Licence plate textures
 
 ### Player:
 - Command to heal yourself with cooldown (/heal)
@@ -46,3 +47,4 @@ In no particular order:
 ## Credits
 - https://github.com/TFNRP/framework
 - https://github.com/TFNRP/WeaponControl
+- https://www.modding-forum.com/downloads/file/55-better-license-plates/
