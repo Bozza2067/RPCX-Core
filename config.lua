@@ -262,4 +262,15 @@ blips = {
 		address = "9047 Elgin Ave, Strawberry, SA",
 		lowpriority = true,
 	},
+	{
+		type = "Coffee shop",
+		id = 76,
+		x = -1232.51,  
+		y = -1179.7, 
+		z = 7.66, 
+		name = "Calm Coffee",
+		image = "calmcoffee",
+		address = "8216 Cortes St, Vespucci, SA",
+		lowpriority = true,
+	},
 }
