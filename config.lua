@@ -5,7 +5,7 @@ UseModifiedPlates = true -- Use license plate textures from the plates.ytd file
 
 -- Set your map name and game type for the FiveM server browser
 MapName = "San Andreas"
-GameType = "Freeroam"
+GameType = "Roleplay"
 
 WelcomeMessage = "Welcome to RPCX. This server is a public alpha for an upcoming RP server based on PolicingMP." -- Set text to be displayed in top left corner upon joining the server. Max 99 characters.
 WelcomeMessage2 = "To find out more, visit rpcx.policingmp.net" -- Optional part 2 to above. Will be displayed 10 seconds after the first one. Leave empty to ignore.

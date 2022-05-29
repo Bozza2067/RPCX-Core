@@ -1,34 +1,34 @@
 -- VAR
 
-	local Constants = {
-		SEMI_AUTO = 1,
-		BURST_FIRE = 2,
-		FULL_AUTO = 3,
-	}
 
 	local AllowedAuto = {
 		[GetHashKey('GROUP_RIFLE')] = true,
 		[GetHashKey('GROUP_SMG')] = true,
 	}
 
+	-- Don't change these!
+	local healCooldown = false
+	local armorCooldown = false
+	local firstJoin = true
 	local Weapons = {}
-
-	local healCooldown = false -- DON'T CHANGE THIS
-	local armorCooldown = false -- DON'T CHANGE THIS
-
+	local Constants = {
+		SEMI_AUTO = 1,
+		BURST_FIRE = 2,
+		FULL_AUTO = 3,
+	}
 	DoorIndex = {
-	['driver'] = 1,
-	['left'] = 1,
-	['passenger'] = 2,
-	['right'] = 2,
-	['rear left passenger'] = 3,
-	['rear left'] = 3,
-	['rear right passenger'] = 4,
-	['rear right'] = 4,
-	['hood'] = 5,
-	['bonnet'] = 5,
-	['trunk'] = 6,
-	['boot'] = 6,
+		['driver'] = 1,
+		['left'] = 1,
+		['passenger'] = 2,
+		['right'] = 2,
+		['rear left passenger'] = 3,
+		['rear left'] = 3,
+		['rear right passenger'] = 4,
+		['rear right'] = 4,
+		['hood'] = 5,
+		['bonnet'] = 5,
+		['trunk'] = 6,
+		['boot'] = 6,
 	}
 
 -- INIT
