@@ -73,6 +73,22 @@
 		end
 	end)
 
+-- SHOW MESSAGE ON JOIN
+
+	AddEventHandler("playerSpawned", function(spawn)
+		if firstJoin then
+			Citizen.Wait(2500)
+			PlaySoundFrontend(-1, "Click", "DLC_HEIST_HACKING_SNAKE_SOUNDS", true)
+			ShowInfo(WelcomeMessage)
+			if WelcomeMessage2 ~= nil then
+				Citizen.Wait(11000)
+				PlaySoundFrontend(-1, "Click", "DLC_HEIST_HACKING_SNAKE_SOUNDS", true)
+				ShowInfo(WelcomeMessage2)
+			end
+			firstJoin = false
+		end
+	end)
+
 -- RECOIL, FIRING MODES, RANDOM MALFUNCTIONS
 -- Credit: https://github.com/TFNRP/WeaponControl
 	Citizen.CreateThread(function()
