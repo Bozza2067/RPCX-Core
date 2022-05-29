@@ -40,6 +40,7 @@ In no particular order:
 - Unlock the 'Still Slipping Los Santos' radio station
 - Weapons you select in cars will be selected when you get out, and vice versa
 - Set your server's map name and game type
+- Display a welcome message as help text when first spawning.
 
 ## Dependencies
 - https://github.com/glitchdetector/fivem-blip-info Required to see additional info in the pause menu
