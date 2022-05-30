@@ -709,6 +709,15 @@ poleDConfig = {}
 		DrawNotification(false, false)
 	end
 
+	RegisterNetEvent("missiontext")
+	AddEventHandler("missiontext", function(text, time)
+			ClearPrints()
+			SetTextEntry_2("STRING")
+			AddTextComponentString(text)
+			DrawSubtitleTimed(time, 1)
+	end)
+	-- Trigger Mission Text every ms: TriggerEvent("missiontext", "Here is some ~r~red~w~ text.", 500)
+
 	-- https://github.com/TFNRP/framework/blob/main/client.lua
 	function GetVehiclePedIsInOrNear(ped, lastVehicle)
 	  local vehicle = GetVehiclePedIsIn(ped, lastVehicle)
