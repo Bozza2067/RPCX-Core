@@ -216,7 +216,7 @@ blips = {
         y = -1290.04,
         z = 28.23,
 		name = "San Andreas Highway Patrol",
-		address = "9246 SPopular St, La Mesa, SA",
+		address = "9246 Popular St, La Mesa, SA",
 		lowpriority = true,
 		website = "sahp.sa.gov",
 	},
@@ -296,7 +296,7 @@ blips = {
 		z = 29.62, 
 		name = "Market Station",
 		--image = "markettrainstation",
-		--address = "8216 Cortes St, Vespucci, SA",
+		address = "9060 Capital Blvd, La Mesa, SA",
 		lowpriority = true,
 	},
 }
