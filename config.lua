@@ -196,6 +196,7 @@ blips = {
 		image = "lspd_mission",
 		address = "8047 Sinner St, Mission Row, SA",
 		lowpriority = true,
+		website = "lspdonline.org",
 	},
 	{
 		type = "Police department",
@@ -208,7 +209,17 @@ blips = {
 		lowpriority = true,
 		website = "delperropd.org",
 	},
-
+	{
+		type = "Police department",
+		id = 526,
+        x = 832.88,
+        y = -1290.04,
+        z = 28.23,
+		name = "San Andreas Highway Patrol",
+		address = "9246 SPopular St, La Mesa, SA",
+		lowpriority = true,
+		website = "sahp.sa.gov",
+	},
 	{
 		type = "Theater",
 		id = 86,
@@ -279,12 +290,12 @@ blips = {
 	},
 	{
 		type = "Train Station",
-		id = 76,
+		id = 85,
 		x = 506.17,  
 		y = -1460.04, 
 		z = 29.62, 
 		name = "Market Station",
-		image = "markettrainstation",
+		--image = "markettrainstation",
 		--address = "8216 Cortes St, Vespucci, SA",
 		lowpriority = true,
 	},
