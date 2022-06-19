@@ -277,4 +277,15 @@ blips = {
 		address = "8216 Cortes St, Vespucci, SA",
 		lowpriority = true,
 	},
+	{
+		type = "Train Station",
+		id = 76,
+		x = 506.17,  
+		y = -1460.04, 
+		z = 29.62, 
+		name = "Market Station",
+		image = "markettrainstation",
+		--address = "8216 Cortes St, Vespucci, SA",
+		lowpriority = true,
+	},
 }
