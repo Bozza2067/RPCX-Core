@@ -74,6 +74,24 @@
 		end
 	end)
 
+-- LOOP 500
+	Citizen.CreateThread(function()
+		while true do
+
+			-- Hide radar when on foot
+			local radarEnabled = IsRadarEnabled()
+			if not IsPedInAnyVehicle(PlayerPedId()) and radarEnabled then
+				DisplayRadar(false)
+			elseif IsPedInAnyVehicle(PlayerPedId()) and not radarEnabled then
+				DisplayRadar(true)
+			end
+
+			-- Loop Wait 500ms
+			Citizen.Wait(500)
+		end
+	end)
+
+
 -- SHOW MESSAGE ON JOIN
 
 	AddEventHandler("playerSpawned", function(spawn)
