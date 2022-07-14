@@ -304,47 +304,9 @@
 
 	TriggerEvent('chat:addSuggestion', '/heal', 'Refill your health.')
 	RegisterCommand('heal', function(source, args, rawCommand)
-		if healCooldown == false then
 			TriggerServerEvent('txaLogger:CommandExecuted', rawCommand)
-			healCooldown = true
-			ShowInfo("You will be healed in 15 seconds. Please wait.")
-			Wait(1000)
-			ShowInfo("You will be healed in 14 seconds. Please wait.")
-			Wait(1000)
-			ShowInfo("You will be healed in 13 seconds. Please wait.")
-			Wait(1000)
-			ShowInfo("You will be healed in 12 seconds. Please wait.")
-			Wait(1000)
-			ShowInfo("You will be healed in 11 seconds. Please wait.")
-			Wait(1000)
-			ShowInfo("You will be healed in 10 seconds. Please wait.")
-			Wait(1000)
-			ShowInfo("You will be healed in 9 seconds. Please wait.")
-			Wait(1000)
-			ShowInfo("You will be healed in 8 seconds. Please wait.")
-			Wait(1000)
-			ShowInfo("You will be healed in 7 seconds. Please wait.")
-			Wait(1000)
-			ShowInfo("You will be healed in 6 seconds. Please wait.")
-			Wait(1000)
-			ShowInfo("You will be healed in 6 seconds. Please wait.")
-			Wait(1000)
-			ShowInfo("You will be healed in 5 seconds. Please wait.")
-			Wait(1000)
-			ShowInfo("You will be healed in 4 seconds. Please wait.")
-			Wait(1000)
-			ShowInfo("You will be healed in 3 seconds. Please wait.")
-			Wait(1000)
-			ShowInfo("You will be healed in 2 seconds. Please wait.")
-			Wait(1000)
-			ShowInfo("You will be healed in 1 seconds. Please wait.")
-			Wait(1000)
 			SetEntityHealth(GetPlayerPed(-1), 200)
-			ShowInfo("You have been healed. You will be able to heal yourself again in 20 seconds.")
-			Wait(20000)
-			healCooldown = false
-		else
-			ShowInfo("You cannot heal yourself now.")
+			ShowInfo("You have been healed.")
 		end
 	end)
 	
@@ -654,6 +616,9 @@ poleDConfig = {}
 	
 	Citizen.CreateThread(function()
 		if UseModifiedPlates then
+
+			-- Modify Plate Textures
+
 			if not HasStreamedTextureDictLoaded("plates") then
 				RequestStreamedTextureDict("plates", true)
 				while not HasStreamedTextureDictLoaded("plates") do
@@ -690,6 +655,41 @@ poleDConfig = {}
 			RemoveReplaceTexture("vehshare", "vehicle_generic_plate_font_n")
 			AddReplaceTexture	("vehshare", "vehicle_generic_plate_font_n", "plates", "vehicle_generic_plate_font_n")
 		end
+	end)
+
+-- Change license plates
+
+
+	Citizen.CreateThread(function()
+
+		while true do
+			ped = GetPlayerPed(-1)
+			if IsPedInAnyVehicle(ped, false) then
+				playerVeh = GetVehiclePedIsIn(ped,false)
+			else
+				playerVeh = nil
+			end
+			playerVehPlate = GetVehicleNumberPlateText(playerVeh)
+			if playerVehPlate ~= nil then
+				if string.match(playerVehPlate, '%D') and GetVehicleNumberPlateTextIndex(playerVeh) == 4 then
+					if GetVehicleClass(playerVeh) == 17 or GetVehicleClass(playerVeh) == 18 then
+						math.randomseed(GetGameTimer())
+						local govPlate = tostring(math.random(10000000,16199999))
+						SetVehicleNumberPlateText(playerVeh,govPlate)
+					end
+				end
+				if playerVehPlate == "46EEK572" or playerVehPlate == " FIVE M " or playerVehPlate == " MENYOO " then
+					math.randomseed(GetGameTimer())
+					local firstNum = tostring(math.random(10,99))
+					local secondNum = tostring(math.random(100,999))
+					SetVehicleNumberPlateText(playerVeh,firstNum .. "SHT" .. secondNum)
+				end
+			end
+
+			Citizen.Wait(200)
+
+		end
+
 	end)
 
 -- Functions
