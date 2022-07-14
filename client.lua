@@ -315,32 +315,17 @@
 	})
 	RegisterFrameworkCommand({ 'armour', 'armor' }, function(source, args, raw)
 		local amount = (tonumber(args[1]) or 5) * 20
-		if armorCooldown == false then
-			TriggerServerEvent('txaLogger:CommandExecuted', rawCommand)
-			if not IsPlayerDead(PlayerId()) then
-				armorCooldown = true
-				ShowInfo("Replenishing your armor. Please wait 5 seconds.")
-				Wait(1000)
-				ShowInfo("Replenishing your armor. Please wait 4 seconds.")
-				Wait(1000)
-				ShowInfo("Replenishing your armor. Please wait 3 seconds.")
-				Wait(1000)
-				ShowInfo("Replenishing your armor. Please wait 2 seconds.")
-				Wait(1000)
-				ShowInfo("Replenishing your armor. Please wait 1 second.")
-				Wait(1000)
-				ShowInfo("Your armor has been replenished. You will be able to replenish it again in 10 seconds.")
-				Wait(10000)
-				if amount > 100 then 
-					amount = 100
-				elseif amount < 0 then 
-					amount = 0 
-				end
-				SetPedArmour(PlayerPedId(), amount)
-				armorCooldown = false
-			else
-				ShowInfo("You cannot replenish your armor now.")
+		TriggerServerEvent('txaLogger:CommandExecuted', rawCommand)
+		if not IsPlayerDead(PlayerId()) then
+			if amount > 100 then 
+				amount = 100
+			elseif amount < 0 then 
+				amount = 0 
 			end
+			SetPedArmour(PlayerPedId(), amount)
+			armorCooldown = false
+		else
+			ShowInfo("You cannot replenish your armor now.")
 		end
 	end)
 
