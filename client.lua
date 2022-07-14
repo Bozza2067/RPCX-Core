@@ -34,11 +34,9 @@
 -- INIT
 
 	DistantCopCarSirens(false) -- Disables distant cop car sirens
-	LockRadioStation("RADIO_27_DLC_PRHEI4", false) -- Unlock Still Slipping Los Santos
 	SetFlashLightKeepOnWhileMoving(true) -- Keep weapon flashlight on
 	SetWeaponsNoAutoreload(true) -- Stop automatic reloads
 	SetWeaponsNoAutoswap(true) -- Stop automatic swap weapon on empty
-	AddTextEntry('FE_THDR_GTAO', ServerName)
 	
 -- LOOP 0
 	Citizen.CreateThread(function()
@@ -184,20 +182,6 @@
 			})[Weapon.FiringMode])
 			PlayClick(ped)
 			end
-		end
-	end)
-
--- Discord Rich Presence
-
-	Citizen.CreateThread(function()
-		if RichPresence.Enabled == true then
-			if RichPresence.AppID ~= nil then
-				SetDiscordAppId(tonumber(GetConvar("RichAppId", RichPresence.AppID)))
-				SetDiscordRichPresenceAsset(GetConvar("RichAssetId", RichPresence.AssetID))
-			end
-			--SetDiscordRichPresenceAction(0, "Connect to the server", "fivem://connect/m633od")
-			--SetDiscordRichPresenceAction(1, "See our website and servers list", "https://www.policingmp.net")
-			SetRichPresence(RichPresence.Text.Line2 .. "\n" .. RichPresence.Text.Line1)
 		end
 	end)
 
