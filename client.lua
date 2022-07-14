@@ -542,50 +542,6 @@ poleDConfig = {}
 		end
 	end
 
--- Create map blips
-
-	Citizen.CreateThread(function()
-		RequestStreamedTextureDict("mapimages") -- Load mapimages.ytd into memory
-		for _, item in pairs(blips) do
-			item.blip = AddBlipForCoord(item.x, item.y, item.z)
-			SetBlipSprite(item.blip, item.id)
-			SetBlipAsShortRange(item.blip, item.lowpriority)
-			BeginTextCommandSetBlipName("STRING")
-			AddTextComponentString(item.type)
-			EndTextCommandSetBlipName(item.blip)
-			if item.name then
-				if item.image then
-					exports['blip_info']:SetBlipInfoImage(item.blip, "mapimages", item.image)
-				end
-				exports['blip_info']:SetBlipInfoTitle(item.blip, item.name, false)
-				exports['blip_info']:AddBlipInfoHeader(item.blip, item.address, "")
-				exports['blip_info']:AddBlipInfoText(item.blip, item.type)
-				if item.description then
-					exports['blip_info']:AddBlipInfoText(item.blip, item.description)
-				end
-				--[[ THIS SECTION IS A WORK IN PROGRESS AND DOESN'T WORK!
-					if item.Check1.Title then
-					exports['blip_info']:AddBlipInfoIcon(blip, "", item.Check1.Title, item.Check1.Value, 0, false)
-					if item.Check2.Title then
-						exports['blip_info']:AddBlipInfoIcon(blip, "", item.Check2.Title, item.Check2.Value, 0, false)
-						if item.Check3.Title then
-							exports['blip_info']:AddBlipInfoIcon(blip, "", item.Check3.Title, item.Check3.Value, 0, false)
-						end
-					end
-				end
-				]]
-				if item.website then
-					exports['blip_info']:AddBlipInfoText(item.blip, item.website)
-				end
-				if item.phone then
-					exports['blip_info']:AddBlipInfoText(item.blip, item.phone)
-				end
-			end
-			Citizen.Wait(0)
-		end
-	end)
-
-
 -- Persistent Flashlight compatibility with BetterFlashlight
 	Citizen.CreateThread(function()
 		while true do
