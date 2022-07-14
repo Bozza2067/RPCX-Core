@@ -36,7 +36,6 @@ In no particular order:
 - Blackout mode that keeps vehicle lights on (/blackout)
 - Riot mode: NPCs will be given random guns and attack other NPCs and players (/riot). 
 - Weapons you select in cars will be selected when you get out, and vice versa
-- Display a welcome message as help text when first spawning.
 - Hide map while on foot
 
 ## Credits
