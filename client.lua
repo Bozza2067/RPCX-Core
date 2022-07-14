@@ -307,7 +307,6 @@
 			TriggerServerEvent('txaLogger:CommandExecuted', rawCommand)
 			SetEntityHealth(GetPlayerPed(-1), 200)
 			ShowInfo("You have been healed.")
-		end
 	end)
 	
 	RegisterCommandSuggestion({ 'armour', 'armor' }, 'Set your armour.', {
