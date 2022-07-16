@@ -484,48 +484,6 @@
 			end
 		end)
 
--- Pole dance at strip club
-poleDConfig = {}
-
-	poleDConfig['PoleDance'] = { 
-		['Enabled'] = true,
-		['Locations'] = {
-			{['Position'] = vector3(112.60, -1286.76, 28.56), ['Number'] = '1'},
-			{['Position'] = vector3(104.18, -1293.94, 29.26), ['Number'] = '2'},
-			{['Position'] = vector3(102.24, -1290.54, 29.26), ['Number'] = '3'}
-		}
-	}
-
-	FishyDEV = false
-
-	Citizen.CreateThread(function()
-		while true do
-			Citizen.Wait(0)
-					for k, v in pairs(poleDConfig['PoleDance']['Locations']) do
-						if #(GetEntityCoords(PlayerPedId()) - v['Position']) <= 1.0 then
-							ShowInfo("Press ~INPUT_CONTEXT~ to pole dance.")
-							if IsControlJustReleased(0, 51) and not FishyDEV then
-								FishyDEV = true
-								LoadDict('mini@strip_club@pole_dance@pole_dance' .. v['Number'])
-								local scene = NetworkCreateSynchronisedScene(v['Position'], vector3(0.0, 0.0, 0.0), 2, false, true, 1065353216, 0, 1.3)
-								NetworkAddPedToSynchronisedScene(PlayerPedId(), scene, 'mini@strip_club@pole_dance@pole_dance' .. v['Number'], 'pd_dance_0' .. v['Number'], 1.5, -4.0, 1, 1, 1148846080, 0)
-								NetworkStartSynchronisedScene(scene)
-							elseif IsControlJustReleased(0, 51) and FishyDEV then
-							FishyDEV = false
-							ClearPedTasksImmediately(PlayerPedId())
-							end
-						end
-					end
-		end
-	end)
-
-	LoadDict = function(Dict)
-		while not HasAnimDictLoaded(Dict) do 
-			Wait(0)
-			RequestAnimDict(Dict)
-		end
-	end
-
 -- Persistent Flashlight compatibility with BetterFlashlight
 	Citizen.CreateThread(function()
 		while true do
@@ -534,6 +492,56 @@ poleDConfig = {}
 				SetFlashLightKeepOnWhileMoving(true)
 			end
 		end
+	end)
+
+-- Get into closest vehicle door
+-- https://github.com/itsJarrett/FiveM-seat_seater/
+
+	Citizen.CreateThread(function()
+
+		local getInDoors = {
+			{"seat_dside_f", -1},
+			{"seat_pside_f", 0},
+			{"seat_dside_r", 1},
+			{"seat_pside_r", 2}
+		}
+		
+		while true do
+			Citizen.Wait(0)
+				
+			local ped = PlayerPedId()
+				
+			   if IsControlJustReleased(0, 23) and running ~= true and GetVehiclePedIsIn(ped, false) == 0 then
+				  local vehicle = VehicleInFront(ped)
+					
+				  running = true
+					
+				  if vehicle ~= nil then
+					local plyCoords = GetEntityCoords(ped, false)
+					local doorDistances = {}
+						
+					for k, door in pairs(getInDoors) do
+						  local doorBone = GetEntityBoneIndexByName(vehicle, door[1])
+						  local doorPos = GetWorldPositionOfEntityBone(vehicle, doorBone)
+						  local distance = Vdist(plyCoords.x, plyCoords.y, plyCoords.z, doorPos.x, doorPos.y, doorPos.z)
+							
+						  table.insert(doorDistances, distance)
+					end
+						
+					local key, min = 1, doorDistances[1]
+						
+					for k, v in ipairs(doorDistances) do
+						  if doorDistances[k] < min then
+							   key, min = k, v
+						  end
+					end
+						
+					TaskEnterVehicle(ped, vehicle, -1, getInDoors[key][2], 1.5, 1, 0)
+				 end
+					
+				  running = false
+			end
+		  end
 	end)
 
 -- Functions
@@ -569,6 +577,15 @@ poleDConfig = {}
 		SetNotificationTextEntry("STRING")
 		AddTextComponentString(text)
 		DrawNotification(false, false)
+	end
+
+	function VehicleInFront(ped)
+		local pos = GetEntityCoords(ped)
+		local entityWorld = GetOffsetFromEntityInWorldCoords(ped, 0.0, 5.0, 0.0)
+		local rayHandle = CastRayPointToPoint(pos.x, pos.y, pos.z, entityWorld.x, entityWorld.y, entityWorld.z, 10, ped, 0)
+		local _, _, _, _, result = GetRaycastResult(rayHandle)
+		
+		return result
 	end
 
 	RegisterNetEvent("missiontext")
