@@ -544,6 +544,15 @@
 		  end
 	end)
 
+	Citizen.CreateThread(function()
+		while true do
+			Citizen.Wait(0)
+			if IsControlPressed(0, 20) then
+				SetRadarZoomToDistance(200.0)
+			end
+		end
+	end)
+
 -- Functions
 
 	function WeaponStub()
