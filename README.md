@@ -37,6 +37,7 @@ In no particular order:
 - Riot mode: NPCs will be given random guns and attack other NPCs and players (/riot). 
 - Weapons you select in cars will be selected when you get out, and vice versa
 - Hide map while on foot
+- Hold Z/D-Pad-Down to zoom out minimap
 
 ## Credits
 - https://github.com/TFNRP/framework
