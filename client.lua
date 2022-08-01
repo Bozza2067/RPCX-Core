@@ -495,7 +495,7 @@
 	end)
 
 -- Get into closest vehicle door
--- https://github.com/itsJarrett/FiveM-seat_seater/
+	-- https://github.com/itsJarrett/FiveM-seat_seater/
 
 	Citizen.CreateThread(function()
 
@@ -553,7 +553,69 @@
 		end
 	end)
 
--- Functions
+-- CHAT COMMANDS
+
+	RegisterNetEvent("sendProximityMessage")
+	AddEventHandler("sendProximityMessage", function(sender, message, color, range)
+		local player = GetPlayerFromServerId(sender)
+		local ped = GetPlayerPed(player)
+
+		if player == -1 then return end
+
+		local sender_coords = GetEntityCoords(ped)
+		local local_ped = {}
+		local_ped.handle = PlayerPedId()
+		local_ped.position = GetEntityCoords(local_ped.handle)
+
+		local dist = #(local_ped.position - sender_coords)
+		if dist <= range then
+			TriggerEvent(
+				"chat:addMessage", {
+					args = {
+						message
+					},
+					color = color
+				}
+			)
+		end
+	end)
+	RegisterCommandSuggestion({ "bleet", "tweet", }, 'Post a message on Bleeter.', {
+		{ name = 'Message', help = 'The message you want to post' }
+	})
+	RegisterCommandSuggestion('me', 'Indicate that your character is doing something to nearby players.', {
+		{ name = 'Action', help = 'What your character is doing. Example: "/me reaches into their glovebox and retrieves a wallet."' }
+	})
+	RegisterCommandSuggestion('my', 'Indicate that something belonging to your character is doing something to nearby players.', {
+		{ name = 'Action', help = 'What your character\'s item is doing. Example: "/my car is on fire."' }
+	})
+	RegisterCommandSuggestion('do', 'Used to describe something or answer role-play questions for nearby players.', {
+		{ name = 'Description or Action', help = 'Giving a description or answering RP questions. Example: "/do The license plate 46EEK572 comes back stolen out of Rockford Hills."' }
+	})
+	RegisterCommandSuggestion('local', 'Send an out-of-character message to nearby players.', {
+		{ name = 'Message', help = 'The message you want to send' }
+	})
+	RegisterCommandSuggestion('gme', 'Indicate that your character is doing something to all players.', {
+		{ name = 'Action', help = 'What your character is doing. Example: "/gme asks for permission to see the security camera footage from the store across the street."' }
+	})
+	RegisterCommandSuggestion('gmy', 'Indicate that something belonging to your character is doing something to all players.', {
+		{ name = 'Action', help = 'What your character\'s item is doing. Example: "/my car is on fire."' }
+	})
+	RegisterCommandSuggestion('gdo', 'Used to describe something or answer role-play questions for all players.', {
+		{ name = 'Description or Action', help = 'Giving a description or answering RP questions. Example: "/gdo On the cameras, you would see a male in dark clothing fleeing on a blue motorcycle."' }
+	})
+	RegisterCommandSuggestion('ooc', 'Send an out-of-character message to the entire server.', {
+		{ name = 'Message', help = 'The message you want to send' }
+	})
+	RegisterCommandSuggestion('img', 'Send an image in chat.', {
+		{ name = 'URL', help = 'URL to the image you wish to send.' }
+	})
+	--[[
+	RegisterCommandSuggestion('', '', {
+		{ name = '', help = '' }
+	})
+	]]
+
+	-- Functions
 
 	function WeaponStub()
 		return {
