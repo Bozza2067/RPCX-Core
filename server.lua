@@ -8,70 +8,79 @@
     globalColor = {89, 198, 189}
     localColor = {89, 98, 198}
     icColor = {149, 210, 2353}
-    bleeterColor = {87, 195, 120}
+    --bleeterColor = {87, 195, 120}
     chatColor = {200, 200, 200}
     actionRanges = 20
 
-    RegisterCommand({ "bleet", "tweet" }, function(source, args)
+    --[[RegisterCommand({ "bleet", "tweet" }, function(source, args)
         if source == 0 then return end
         if not args[1] then return SendChatMessage(source, "[bleet] Command requires input.", errColor) end
 
         SendChatMessage(-1, "[Bleeter] @" .. GetPlayerName(source) .. ": " .. table.concat(args, " "), bleeterColor)
-    end)
+    end)]]
 
     RegisterCommand("gme", function(source, args)
         if source == 0 then return end
         if not args[1] then return SendChatMessage(source, "[GMY] Command requires input.", errColor) end
-
-        SendChatMessage(-1, "[GME] " .. GetPlayerName(source) .. " " .. table.concat(args, " "), globalColor)
+        local messageToSend = "[GME] " .. GetPlayerName(source) .. " " .. table.concat(args, " ")
+        SendChatMessage(-1, messageToSend, globalColor)
+        PerformHttpRequest(webhook, function(err, text, headers) end, 'POST', json.encode({username = GetPlayerName(source), content = messageToSend}), { ['Content-Type'] = 'application/json' })
     end)
 
     RegisterCommand("gmy", function(source, args)
         if source == 0 then return end
         if not args[1] then return SendChatMessage(source, "[gme] Command requires input.", errColor) end
-
-        SendChatMessage(-1, "[GMY] " .. GetPlayerName(source) .. "'s " .. table.concat(args, " "), globalColor)
+        local messageToSend = "[GMY] " .. GetPlayerName(source) .. "'s " .. table.concat(args, " ")
+        SendChatMessage(-1, messageToSend, globalColor)
+        PerformHttpRequest(webhook, function(err, text, headers) end, 'POST', json.encode({username = GetPlayerName(source), content = messageToSend}), { ['Content-Type'] = 'application/json' })
     end)
 
     RegisterCommand("gdo", function(source, args)
         if source == 0 then return end
         if not args[1] then return SendChatMessage(source, "[GDO] Command requires input.", errColor) end
-
-        SendChatMessage(-1, "[GDO] " .. table.concat(args, " ") .. " (( " .. GetPlayerName(source) .. " ))", globalColor)
+        local messageToSend = "[GDO] " .. table.concat(args, " ") .. " (( " .. GetPlayerName(source) .. " ))"
+        SendChatMessage(-1, messageToSend, globalColor)
+        PerformHttpRequest(webhook, function(err, text, headers) end, 'POST', json.encode({username = GetPlayerName(source), content = messageToSend}), { ['Content-Type'] = 'application/json' })
     end)
 
     RegisterCommand("me", function(source, args)
         if source == 0 then return end
         if not args[1] then return SendChatMessage(source, "[ME] Command requires input.", errColor) end
-
-        SendProximityMessage(source, "[ME] " .. GetPlayerName(source) .. " " .. table.concat(args, " "), localColor, actionRanges)
+        local messageToSend = "[ME] " .. GetPlayerName(source) .. " " .. table.concat(args, " ")
+        SendProximityMessage(source, messageToSend, localColor, actionRanges)
+        PerformHttpRequest(webhook, function(err, text, headers) end, 'POST', json.encode({username = GetPlayerName(source), content = messageToSend}), { ['Content-Type'] = 'application/json' })
     end)
 
     RegisterCommand("my", function(source, args)
         if source == 0 then return end
         if not args[1] then return SendChatMessage(source, "[MY] Command requires input.", errColor) end
-
-        SendProximityMessage(source, "[MY] " .. GetPlayerName(source) .. "'s " .. table.concat(args, " "), localColor, actionRanges)
+        local messageToSend = "[MY] " .. GetPlayerName(source) .. "'s " .. table.concat(args, " ")
+        SendProximityMessage(source, messageToSend, localColor, actionRanges)
+        PerformHttpRequest(webhook, function(err, text, headers) end, 'POST', json.encode({username = GetPlayerName(source), content = messageToSend}), { ['Content-Type'] = 'application/json' })
     end)
 
     RegisterCommand("ooc", function(source, args)
         if source == 0 then return end
         if not args[1] then return SendChatMessage(source, "[OOC] Command requires input.", errColor) end
-
-        SendChatMessage(-1, "[OOC] " .. GetPlayerName(source) .. ": (( " .. table.concat(args, " ") .. " ))", chatColor)
+        local messageToSend = "[OOC] " .. GetPlayerName(source) .. ": (( " .. table.concat(args, " ") .. " ))"
+        SendChatMessage(-1, messageToSend, chatColor)
+        PerformHttpRequest(webhook, function(err, text, headers) end, 'POST', json.encode({username = GetPlayerName(source), content = messageToSend}), { ['Content-Type'] = 'application/json' })
     end)
+
     RegisterCommand("/", function(source, args)
         if source == 0 then return end
         if not args[1] then return SendChatMessage(source, "[OOC] Command requires input.", errColor) end
-
-        SendChatMessage(-1, "[OOC] " .. GetPlayerName(source) .. ": (( " .. table.concat(args, " ") .. " ))", chatColor)
+        local messageToSend = "[OOC] " .. GetPlayerName(source) .. ": (( " .. table.concat(args, " ") .. " ))"
+        SendChatMessage(-1, messageToSend, chatColor)
+        PerformHttpRequest(webhook, function(err, text, headers) end, 'POST', json.encode({username = GetPlayerName(source), content = messageToSend}), { ['Content-Type'] = 'application/json' })
     end)
 
     RegisterCommand("local", function(source, args)
         if source == 0 then return end
         if not args[1] then return SendChatMessage(source, "[LOCAL OOC] Command requires input.", errColor) end
-
-        SendProximityMessage(source, "[LOCAL OOC] " .. GetPlayerName(source) .. ": (( " .. table.concat(args, " ") .. " ))", chatColor, actionRanges)
+        local messageToSend = "[LOCAL OOC] " .. GetPlayerName(source) .. ": (( " .. table.concat(args, " ") .. " ))"
+        SendProximityMessage(source, messageToSend, chatColor, actionRanges)
+        PerformHttpRequest(webhook, function(err, text, headers) end, 'POST', json.encode({username = GetPlayerName(source), content = messageToSend}), { ['Content-Type'] = 'application/json' })
     end)
 
     RegisterCommand('img', function(source, args)
@@ -85,8 +94,9 @@
     RegisterCommand("do", function(source, args)
         if source == 0 then return end
         if not args[1] then return SendChatMessage(source, "[DO] Command requires input.", errColor) end
-
-        SendProximityMessage(source, "[DO] " .. table.concat(args, " ") .. " (( " .. GetPlayerName(source) .. " ))", localColor, actionRanges)
+        local messageToSend = "[DO] " .. table.concat(args, " ") .. " (( " .. GetPlayerName(source) .. " ))"
+        SendProximityMessage(source, messageToSend, localColor, actionRanges)
+        PerformHttpRequest(webhook, function(err, text, headers) end, 'POST', json.encode({username = GetPlayerName(source), content = messageToSend}), { ['Content-Type'] = 'application/json' })
     end)
 
     function SendProximityMessage(sender, message, color, dist)
@@ -122,7 +132,9 @@
 
     AddEventHandler('chatMessage', function(source, name, message)
         if string.sub(message, 1, string.len("/")) ~= "/" then
-            SendProximityMessage(source, "[IC] " .. GetPlayerName(source) .. ": \"" .. message .. "\"", icColor, actionRanges)
+            local messageToSend = "[IC] " .. GetPlayerName(source) .. ": \"" .. message .. "\""
+            SendProximityMessage(source, messageToSend, icColor, actionRanges)
+            PerformHttpRequest(webhook, function(err, text, headers) end, 'POST', json.encode({username = GetPlayerName(source), content = messageToSend}), { ['Content-Type'] = 'application/json' })
         end
         CancelEvent()
     end)
