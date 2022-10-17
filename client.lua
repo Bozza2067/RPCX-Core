@@ -77,11 +77,13 @@
 		while true do
 
 			-- Hide radar when on foot
-			local radarEnabled = IsRadarEnabled()
-			if not IsPedInAnyVehicle(PlayerPedId()) and radarEnabled then
-				DisplayRadar(false)
-			elseif IsPedInAnyVehicle(PlayerPedId()) and not radarEnabled then
-				DisplayRadar(true)
+			if HideMinimapOnFoot then
+				local radarEnabled = IsRadarEnabled()
+				if not IsPedInAnyVehicle(PlayerPedId()) and radarEnabled  then
+					DisplayRadar(false)
+				elseif IsPedInAnyVehicle(PlayerPedId()) and not radarEnabled then
+					DisplayRadar(true)
+				end
 			end
 
 			-- Loop Wait 500ms
