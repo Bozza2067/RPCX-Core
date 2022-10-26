@@ -44,7 +44,7 @@
 			Citizen.Wait(0)
 			SetArtificialLightsState(Blackout) -- Sets light state to current blackout state
 			SetArtificialLightsStateAffectsVehicles(false) -- Re-enables vehicle lights during blackout mode
-			--HideHudComponentThisFrame(14) -- Hide Reticule
+			HideHudComponentThisFrame(14) -- Hide Reticule
 			HideHudComponentThisFrame(2) -- Hide Ammo HUD
 
 			-- decrease dmg output of taser & baton
