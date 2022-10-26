@@ -1,19 +1,17 @@
 	RegisterCommand('riot', function(source, args, rawCommand)
-		if RiotMode == false then
-			RiotMode = true
+		RiotMode = not RiotMode
+		if RiotMode then
 			print("Riot Mode Enabled")
 		else
-			RiotMode = false
 			print("Riot Mode Disabled")
 		end
 	end, true)
 
 	RegisterCommand('blackout', function(source, args, rawCommand)
-		if Blackout == false then
-			Blackout = true
+		Blackout = not Blackout
+		if Blackout then
 			print("Blackout Mode Enabled")
 		else
-			Blackout = false
 			print("Blackout Mode Disabled")
 		end
 	end, true)
