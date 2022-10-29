@@ -37,6 +37,7 @@
 	SetFlashLightKeepOnWhileMoving(true) -- Keep weapon flashlight on
 	SetWeaponsNoAutoreload(true) -- Stop automatic reloads
 	SetWeaponsNoAutoswap(true) -- Stop automatic swap weapon on empty
+	DisableIdleCamera(true) -- Stop Idle Cam
 	
 -- LOOP 0
 	Citizen.CreateThread(function()
