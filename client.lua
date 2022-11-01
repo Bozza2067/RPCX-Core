@@ -43,7 +43,6 @@
 	Citizen.CreateThread(function()
 		while true do
 			Citizen.Wait(0)
-			SetArtificialLightsState(Blackout) -- Sets light state to current blackout state
 			SetArtificialLightsStateAffectsVehicles(false) -- Re-enables vehicle lights during blackout mode
 			HideHudComponentThisFrame(14) -- Hide Reticule
 			HideHudComponentThisFrame(2) -- Hide Ammo HUD
@@ -237,15 +236,6 @@
 		end
 	  end)
 
--- Manage Riot Mode
-
-	Citizen.CreateThread(function()
-		while true do
-			Citizen.Wait(5000)
-			SetRiotModeEnabled(RiotMode)
-		end
-	end)
-
 -- Keep AI Calm, Disable emergency response
 -- Credit: https://github.com/TFNRP/keepcalm
 
@@ -267,23 +257,16 @@
 			for i = 1, 12 do
 				EnableDispatchService(i, false)
 			end
-			if RiotMode == true then
-				SetEveryoneIgnorePlayer(player, false)
-				SetPlayerCanBeHassledByGangs(player, false)
-				SetIgnoreLowPriorityShockingEvents(player, false)
-				SetPedsToCalm(false, handle, iter)
-			else
-				local player = PlayerId()
-				SetPoliceIgnorePlayer(player, true)
-				SetDispatchCopsForPlayer(player, false)
-				SetPlayerCanBeHassledByGangs(player, true)
-				SetIgnoreLowPriorityShockingEvents(player, true)
-				SetPlayerWantedLevel(player, 0, false)
-				SetPlayerWantedLevelNow(player, false)
-				SetPlayerWantedLevel(player, 0, false)
-				local iter, handle = FindFirstPed()
-				SetPedsToCalm(true, handle, iter)
-			end
+			local player = PlayerId()
+			SetPoliceIgnorePlayer(player, true)
+			SetDispatchCopsForPlayer(player, false)
+			SetPlayerCanBeHassledByGangs(player, true)
+			SetIgnoreLowPriorityShockingEvents(player, true)
+			SetPlayerWantedLevel(player, 0, false)
+			SetPlayerWantedLevelNow(player, false)
+			SetPlayerWantedLevel(player, 0, false)
+			local iter, handle = FindFirstPed()
+			SetPedsToCalm(true, handle, iter)
 		end
 	end)
 

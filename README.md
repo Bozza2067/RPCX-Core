@@ -33,8 +33,6 @@ In no particular order:
 ### Misc:
 - NPCs will remain calm in shootings, etc
 - Disabled emergency services responses, wanted levels
-- Blackout mode that keeps vehicle lights on (/blackout)
-- Riot mode: NPCs will be given random guns and attack other NPCs and players (/riot). 
 - Weapons you select in cars will be selected when you get out, and vice versa
 - Hide map while on foot
 - Hold Z/D-Pad-Down to zoom out minimap
