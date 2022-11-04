@@ -11,3 +11,4 @@ shared_script 'shared.lua'
 shared_script 'config.lua'
 
 client_script '**/c_*.lua'
+server_script '**/s_*.lua'
