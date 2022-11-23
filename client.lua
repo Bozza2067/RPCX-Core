@@ -351,7 +351,9 @@
 	-- Credit: https://github.com/TFNRP/framework/blob/main/client.lua
 
 	RegisterCommandSuggestion('hood', 'Open the hood of the vehicle you\'re near.')
+	RegisterCommandSuggestion('bonnet', 'Open the bonnet of the vehicle you\'re near.')
 	RegisterCommandSuggestion('trunk', 'Open the trunk of the vehicle you\'re near.')
+	RegisterCommandSuggestion('boot', 'Open the boot of the vehicle you\'re near.')
 	RegisterCommandSuggestion('door', 'Open a door of the vehicle you\'re near.', {
 	{ name = 'door', help = 'Can be the number of the door or the door\'s name. i.e. "driver", "passenger", "1", "2"' }
 	})
@@ -362,7 +364,7 @@
 	{ name = 'door', help = 'Can be the number of the door or the door\'s name. i.e. "driver", "passenger", "1", "2"' }
 	})
 
-	RegisterFrameworkCommand('hood', function()
+	RegisterFrameworkCommand({'hood', 'bonnet'}, function()
 		local vehicle = GetVehiclePedIsInOrNear(PlayerPedId(), false)
 		if vehicle and vehicle > 1 then
 		  NetworkRequestControlOfEntity(vehicle)
@@ -376,7 +378,7 @@
 		end
 	  end)
 	  
-	  RegisterFrameworkCommand('trunk', function()
+	  RegisterFrameworkCommand({ 'trunk', 'boot' }, function()
 		local vehicle = GetVehiclePedIsInOrNear(PlayerPedId(), false)
 		if vehicle and vehicle > 1 then
 		  NetworkRequestControlOfEntity(vehicle)
@@ -589,7 +591,7 @@
 	RegisterCommandSuggestion('gdo', 'Used to describe something or answer role-play questions for all players.', {
 		{ name = 'Description or Action', help = 'Giving a description or answering RP questions. Example: "/gdo On the cameras, you would see a male in dark clothing fleeing on a blue motorcycle."' }
 	})
-	RegisterCommandSuggestion('ooc', 'Send an out-of-character message to the entire server.', {
+	RegisterCommandSuggestion({ "ooc", "//", }, 'Send an out-of-character message to the entire server.', {
 		{ name = 'Message', help = 'The message you want to send' }
 	})
 	RegisterCommandSuggestion('img', 'Send an image in chat.', {
