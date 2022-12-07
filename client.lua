@@ -301,7 +301,7 @@
 -- Toggle Engine
 	--https://github.com/TFNRP/framework/blob/main/client.lua
 
-	RegisterKeyMapping('engine', 'Toggle Engine', 'keyboard', 'F6')
+	RegisterKeyMapping('engine', 'Toggle Engine', 'keyboard', 'F7')
 	RegisterFrameworkCommand({ 'engine', 'eng' }, function(source, args, raw)
 		local ped = PlayerPedId()
 		if IsPedInAnyVehicle(ped) then
@@ -391,7 +391,11 @@
 		  end
 		end
 	  end)
-	  
+
+	  RegisterKeyMapping("door 1", "Open/Close Front Driver Door", "keyboard", "")
+	  RegisterKeyMapping("door 2", "Open/Close Front Passenger Door", "keyboard", "")
+	  RegisterKeyMapping("door 3", "Open/Close Rear Driver Door", "keyboard", "")
+	  RegisterKeyMapping("door 4", "Open/Close Rear Passenger Door", "keyboard", "")
 	  RegisterFrameworkCommand('door', function(source, args, raw)
 		local vehicle = GetVehiclePedIsInOrNear(PlayerPedId(), false)
 		local loose = true
@@ -591,7 +595,7 @@
 	RegisterCommandSuggestion('gdo', 'Used to describe something or answer role-play questions for all players.', {
 		{ name = 'Description or Action', help = 'Giving a description or answering RP questions. Example: "/gdo On the cameras, you would see a male in dark clothing fleeing on a blue motorcycle."' }
 	})
-	RegisterCommandSuggestion({ "ooc", "//", }, 'Send an out-of-character message to the entire server.', {
+	RegisterCommandSuggestion({ "ooc", "/", }, 'Send an out-of-character message to the entire server.', {
 		{ name = 'Message', help = 'The message you want to send' }
 	})
 	RegisterCommandSuggestion('img', 'Send an image in chat.', {
